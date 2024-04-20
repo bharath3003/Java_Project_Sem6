@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>User Management</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Start Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-success">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">User Management</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <th:block th:if="${user==null}">
+                        <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
+                        <li class="nav-item"><a class="nav-link" href="register">Register</a></li>
+                        <li class="nav-item"><a class="nav-link" href="signin">Login</a></li>
+                    </th:block>
+                    <th:block th:if="${user!=null}">
+                        <li class="nav-item"><a class="nav-link" href="/user/profile">Profile</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/user/projects">Projects</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/logout">Logout</a></li>
+                    </th:block>
+                </ul>
+            </div>
+        </div>
+    </nav>
+        <!-- Navbar content -->
+    </nav>
+    <!-- End Navbar -->
+
+    <!-- Projects Section -->
+    <section class="container mt-4" th:if="${user != null}">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h2 class="card-title text-center">Projects</h2>
+            </div>
+            <div class="card-body">
+                <div class="row mb-3">
+                    <div class="col-sm-12">
+                        <label for="domainSelect" class="form-label">Select Domain:</label>
+                        <select class="form-select" id="domainSelect" onchange="fetchProjects(this.value)">
+                            <option value="" selected>Select Domain</option>
+                            <option th:each="domain : ${T(com.JavaProject.entity.User.DomainName).values()}" th:value="${domain}" th:text="${domain}"></option>
+                        </select>
+                    </div>
+                </div>
+                <div id="projectList" class="row"></div> <!-- Projects will be displayed here -->
+            </div>
+        </div>
+    </section>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script th:inline="javascript">
+        function fetchProjects(domain) {
+            if (domain) {
+                fetch('/api/projects?domain=' + domain)
+                    .then(response => response.json())
+                    .then(data => displayProjects(data));
+            }
+        }
+
+        function displayProjects(projects) {
+            var projectListDiv = document.getElementById('projectList');
+            projectListDiv.innerHTML = ''; // Clear previous projects
+
+            projects.forEach(project => {
+                var projectCard = document.createElement('div');
+                projectCard.classList.add('col-sm-4', 'mb-3');
+
+                var card = `
+                    <div class="card">
+                        <div class="card-header bg-info text-white">${project.projectName}</div>
+                        <div class="card-body">
+                            <p class="card-text">Domain: ${project.domain}</p>
+                            <p class="card-text">Difficulty Level: ${project.difficultyLevel}</p>
+                        </div>
+                    </div>
+                `;
+                projectCard.innerHTML = card;
+
+                projectListDiv.appendChild(projectCard);
+            });
+        }
+    </script>
+</body>
+</html>

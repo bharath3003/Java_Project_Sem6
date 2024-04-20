@@ -60,6 +60,15 @@ public class HomeController {
         return "profile";
     }
 
+    @GetMapping("/user/projects")
+    public String projects() {
+        return "projects"; // Assuming "projects" is the name of the projects page HTML template
+    }
+
+    
+
+
+
     @PostMapping("/saveUser")
     public String saveUser(@ModelAttribute User user, HttpSession session, Model m) {
         User u = userService.saveUser(user);
