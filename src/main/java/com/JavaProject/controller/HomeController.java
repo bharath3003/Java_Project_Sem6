@@ -59,6 +59,16 @@ public class HomeController {
         m.addAttribute("user", user);
         return "profile";
     }
+    @GetMapping("/user/inbox")
+    public String inbox(Principal p, Model m) {
+        String email = p.getName();
+        User user = userRepo.findByEmail(email);
+        m.addAttribute("user", user);
+        return "inbox";
+    }
+    
+
+    
 
     @PostMapping("/saveUser")
     public String saveUser(@ModelAttribute User user, HttpSession session, Model m) {
