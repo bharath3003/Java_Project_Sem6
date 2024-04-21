@@ -25,6 +25,8 @@
     <!-- End Navbar -->
 
    <!-- Inbox Page Section -->
+
+<!-- Inbox Page Section -->
 <section class="container mt-4">
     <div class="card">
         <div class="card-header bg-primary text-white">
@@ -34,15 +36,44 @@
             <div th:each="request : ${requests}">
                 <div class="row mb-3">
                     <label class="col-sm-3 col-form-label">Sender Name:</label>
-                    <div class="col-sm-9">
-                        <p class="form-control-plaintext" th:text="${request.req_sender}"></p>
+                    <div class="col-sm-6">
+                        <p class="form-control-plaintext" th:text="${request.req_sender}" id="senderName"></p>
+                    </div>
+                    <div class="col-sm-3">
+                        <form th:action="@{/acceptRequest}" method="post">
+                            <input type="hidden" name="requestId" th:value="${request.id}">
+                            <input type="hidden" name="reqSender" th:value="${request.req_sender}">
+                            <button type="submit" class="btn btn-success" onclick="removeSenderName()">Accept</button>
+                        </form>
+                        <form th:action="@{/rejectRequest}" method="post">
+                            <input type="hidden" name="reqSender" th:value="${request.req_sender}">
+                            <input type="hidden" name="requestId" th:value="${request.id}">
+                            <button type="submit" class="btn btn-danger" onclick="removeSenderName()">Reject</button>
+                        </form>
+                        
                     </div>
                 </div>
-                <!-- Add other request details as needed -->
             </div>
         </div>
     </div>
 </section>
+<script>
+    var friends = []; // Array to store accepted senders
+</script>
+
+<script>
+    function removeSenderName() {
+        var senderNameElement = document.getElementById("senderName");
+        var senderName = senderNameElement.textContent.trim();
+        senderNameElement.parentNode.parentNode.remove(); // Remove the sender's row from the list
+        // Add senderName to friends list if accept is clicked
+        var acceptButton = event.target;
+        if (acceptButton.classList.contains('btn-success')) {
+            // Add senderName to the friends list
+            friends.push(senderName);
+        }
+    }
+</script>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>

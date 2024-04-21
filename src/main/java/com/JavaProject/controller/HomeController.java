@@ -1,5 +1,5 @@
 package com.JavaProject.controller;
-
+import java.util.List;
 import java.security.Principal;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,13 +8,18 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.JavaProject.repository.UserRepo;
 import com.JavaProject.entity.User;
 import com.JavaProject.service.UserService;
 import com.fasterxml.jackson.annotation.JsonCreator.Mode;
-
+import com.JavaProject.repository.RequestsRepo;
+import com.JavaProject.entity.Requests;
 import jakarta.servlet.http.HttpSession;
+import com.JavaProject.service.RequestService;
+
 
 @Controller
 public class HomeController {
@@ -24,6 +29,13 @@ public class HomeController {
 
     @Autowired
     private UserRepo userRepo;
+
+    @Autowired
+    private RequestsRepo requestsRepo;
+
+    @Autowired
+    private RequestService requestService;
+
 
     @ModelAttribute
     public void commonUser(Principal p, Model m) {
@@ -36,9 +48,6 @@ public class HomeController {
 
     @GetMapping("/")
     public String index(Principal principal) {
-        if (principal != null) {
-            return "redirect:/user/profile";
-        }
         return "index";
     }
 
@@ -64,7 +73,11 @@ public class HomeController {
         String email = p.getName();
         User user = userRepo.findByEmail(email);
         m.addAttribute("user", user);
+        List<Requests> requests = requestsRepo.findAll();
+        // Add requests to the model
+        m.addAttribute("requests", requests);
         return "inbox";
+        
     }
     
 
@@ -79,5 +92,17 @@ public class HomeController {
             session.setAttribute("msg", "Server error");
         }
         return "redirect:/register";
+    }
+
+    @PostMapping("/inbox/acceptRequest")
+    public String acceptRequest(@RequestParam("reqSender") String reqSender) {
+        requestService.acceptRequest(reqSender);
+        return "redirect:/user/inbox/acceptRequest";
+    }
+
+    @PostMapping("/inbox")
+    public String rejectRequest(@RequestParam("reqSender") String reqSender) {
+        requestService.rejectRequestBySender(reqSender);
+        return "redirect:/user/inbox";
     }
 }
