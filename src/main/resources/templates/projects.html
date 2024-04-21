@@ -29,8 +29,6 @@
             </div>
         </div>
     </nav>
-        <!-- Navbar content -->
-    </nav>
     <!-- End Navbar -->
 
     <!-- Projects Section -->
@@ -43,9 +41,9 @@
                 <div class="row mb-3">
                     <div class="col-sm-12">
                         <label for="domainSelect" class="form-label">Select Domain:</label>
-                        <select class="form-select" id="domainSelect" onchange="fetchProjects(this.value)">
+                        <select class="form-select" id="domainSelect">
                             <option value="" selected>Select Domain</option>
-                            <option th:each="domain : ${T(com.JavaProject.entity.User.DomainName).values()}" th:value="${domain}" th:text="${domain}"></option>
+                            <option th:each="domain : ${T(com.JavaProject.entity.Project.DomainName).values()}" th:value="${domain}" th:text="${domain}"></option>
                         </select>
                     </div>
                 </div>
@@ -56,9 +54,14 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
     <script th:inline="javascript">
+        document.getElementById('domainSelect').addEventListener('change', function() {
+            var selectedDomain = this.value;
+            fetchProjects(selectedDomain);
+        });
+
         function fetchProjects(domain) {
             if (domain) {
-                fetch('/api/projects?domain=' + domain)
+                fetch('/user/projects?domain=' + domain)
                     .then(response => response.json())
                     .then(data => displayProjects(data));
             }
