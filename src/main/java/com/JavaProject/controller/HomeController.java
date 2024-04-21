@@ -95,14 +95,15 @@ public class HomeController {
     }
 
     @PostMapping("/inbox/acceptRequest")
-    public String acceptRequest(@RequestParam("reqSender") String reqSender) {
-        requestService.acceptRequest(reqSender);
-        return "redirect:/user/inbox/acceptRequest";
-    }
-
-    @PostMapping("/inbox")
-    public String rejectRequest(@RequestParam("reqSender") String reqSender) {
-        requestService.rejectRequestBySender(reqSender);
+    public String acceptRequest(@RequestParam("reqSender") String reqSender, @ModelAttribute("user") User user) {
+        requestService.acceptRequest(reqSender, user.getEmail());
         return "redirect:/user/inbox";
     }
+
+    @PostMapping("/inbox/rejectRequest")
+    public String rejectRequest(@RequestParam("reqSender") String reqSender, @ModelAttribute("user") User user) {
+        requestService.rejectRequestBySender(reqSender, user.getEmail());
+        return "redirect:/user/inbox";
+    }
+
 }

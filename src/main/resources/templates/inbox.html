@@ -34,40 +34,42 @@
         </div>
         <div class="card-body">
             <div th:each="request : ${requests}">
-                <div class="row mb-3">
+                <!-- Check if the request is intended for the current user -->
+                <div th:if="${request.req_receiver == user.email}" class="row mb-3">
                     <label class="col-sm-3 col-form-label">Sender Name:</label>
                     <div class="col-sm-6">
-                        <p class="form-control-plaintext" th:text="${request.req_sender}" id="senderName"></p>
+                        <p class="form-control-plaintext" th:text="${request.req_sender}" class="senderName"></p>
                     </div>
                     <div class="col-sm-3">
-                        <form th:action="@{/acceptRequest}" method="post">
-                            <input type="hidden" name="requestId" th:value="${request.id}">
+                        <form th:action="@{/inbox/acceptRequest}" method="post" onsubmit="removeSenderName(event)">
                             <input type="hidden" name="reqSender" th:value="${request.req_sender}">
-                            <button type="submit" class="btn btn-success" onclick="removeSenderName()">Accept</button>
-                        </form>
-                        <form th:action="@{/rejectRequest}" method="post">
-                            <input type="hidden" name="reqSender" th:value="${request.req_sender}">
+                            <input type="hidden" name="reqReceiver" th:value="${user.email}">
                             <input type="hidden" name="requestId" th:value="${request.id}">
-                            <button type="submit" class="btn btn-danger" onclick="removeSenderName()">Reject</button>
+                            <button type="submit" class="btn btn-success">Accept</button>
                         </form>
-                        
+                        <form th:action="@{/inbox/rejectRequest}" method="post">
+                            <input type="hidden" name="reqSender" th:value="${request.req_sender}">
+                            <input type="hidden" name="reqReceiver" th:value="${user.email}">
+                            <input type="hidden" name="requestId" th:value="${request.id}">
+                            <button type="submit" class="btn btn-danger">Reject</button>
+                        </form>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </section>
+
 <script>
     var friends = []; // Array to store accepted senders
 </script>
-
 <script>
-    function removeSenderName() {
-        var senderNameElement = document.getElementById("senderName");
+    function removeSenderName(event) {
+        var acceptButton = event.target;
+        var senderNameElement = acceptButton.parentNode.parentNode.querySelector(".senderName");
         var senderName = senderNameElement.textContent.trim();
         senderNameElement.parentNode.parentNode.remove(); // Remove the sender's row from the list
         // Add senderName to friends list if accept is clicked
-        var acceptButton = event.target;
         if (acceptButton.classList.contains('btn-success')) {
             // Add senderName to the friends list
             friends.push(senderName);
@@ -75,6 +77,6 @@
     }
 </script>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

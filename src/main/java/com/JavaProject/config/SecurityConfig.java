@@ -38,13 +38,14 @@ public class SecurityConfig {
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception
 	{
 		http.csrf().disable()
-		.authorizeHttpRequests().requestMatchers("/","/register","/signin","/saveUser","/user/inbox").permitAll()
+		.authorizeHttpRequests().requestMatchers("/","/register","/signin","/saveUser","/inbox/acceptRequest", "/inbox/rejectRequest","/user/inbox").permitAll()
 		.requestMatchers("/user/**").authenticated().and()
 		.formLogin().loginPage("/signin").loginProcessingUrl("/userLogin")
 		//.usernameParameter("email")
 		.defaultSuccessUrl("/user/profile").permitAll();
 		return http.build();
 	}
+	
 
 }
 
