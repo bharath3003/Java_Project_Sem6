@@ -2,7 +2,7 @@ package com.JavaProject.controller;
 
 import java.security.Principal;
 import java.util.List;
-
+import com.JavaProject.dto.ProjectDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -92,23 +92,17 @@ public class HomeController {
     public String projectdetails() {
         return "projectdetails";
     }
-     @GetMapping("/user/projects")
+    @GetMapping("/user/projects")
     public String projects(Model model) {
-        // Get all projects initially
-        List<Project> allProjects = projectService.getAllProjects();
+        List<ProjectDto> allProjects = projectService.getAllProjects();
         model.addAttribute("allProjects", allProjects);
-
-        // Return the projects.html template
         return "projects";
     }
 
     @PostMapping("/user/projects")
     public String projectsByDomain(@RequestParam("domain") DomainName domain, Model model) {
-        // Get projects by domain
-        List<Project> projectsByDomain = projectService.getProjectsByDomain(domain);
-        model.addAttribute("allProjects", projectsByDomain); // Update model with filtered projects
-
-        // Return the projects.html template
+        List<ProjectDto> projectsByDomain = projectService.getProjectsByDomain(domain);
+        model.addAttribute("allProjects", projectsByDomain);
         return "projects";
     }
     @GetMapping("/user/inbox")
