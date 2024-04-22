@@ -72,6 +72,14 @@
                     <div class="col-sm-6">
                         <p class="form-control-plaintext" th:text="${acceptedFriend.friend}"></p>
                     </div>
+                    <div class="col-sm-3">
+                        <!-- Add a button to view profile -->
+                        <form th:action="@{/viewprofile}" method="get">
+                            <input type="hidden" name="friendEmail" th:value="${acceptedFriend.friend}">
+                            <button type="submit" class="btn btn-primary">View Profile</button>
+                        </form>
+                        
+                    </div>
                 </div>
             </div>
         </div>

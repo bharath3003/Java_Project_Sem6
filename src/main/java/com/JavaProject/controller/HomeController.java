@@ -115,5 +115,16 @@ public class HomeController {
         requestService.rejectRequestBySender(reqSender, user.getEmail());
         return "redirect:/user/inbox";
     }
+    @GetMapping("/viewprofile")
+    public String viewFriendProfile(@RequestParam("friendEmail") String friendEmail, Model model) {
+        // Retrieve the friend's profile from the database using their email
+        User friend = userService.getUserByEmail(friendEmail);
+        
+        // Add the friend's profile to the model
+        model.addAttribute("friend", friend);
+        
+        return "friend_profile"; // Assuming friend_profile.html is the template for friend profiles
+    }
+
 
 }

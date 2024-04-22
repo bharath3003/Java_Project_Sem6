@@ -1,6 +1,4 @@
 package com.JavaProject.config;
-
-
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -38,7 +36,7 @@ public class SecurityConfig {
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception
 	{
 		http.csrf().disable()
-		.authorizeHttpRequests().requestMatchers("/","/register","/signin","/saveUser","/user/inbox","/inbox/acceptRequest", "/inbox/rejectRequest").permitAll()
+		.authorizeHttpRequests().requestMatchers("/","/register","/signin","/saveUser","/user/inbox","/inbox/acceptRequest", "/inbox/rejectRequest","/viewprofile").permitAll()
 		.requestMatchers("/user/**").authenticated().and()
 		.formLogin().loginPage("/signin").loginProcessingUrl("/userLogin")
 		//.usernameParameter("email")
@@ -48,5 +46,3 @@ public class SecurityConfig {
 	
 
 }
-
-

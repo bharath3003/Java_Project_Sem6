@@ -39,5 +39,9 @@ public class UserServiceImpl implements UserService {
 
 		session.removeAttribute("msg");
 	}
+	@Override
+    public User getUserByEmail(String email) {
+        return userRepo.findByEmail(email);
+    }
 
 }
