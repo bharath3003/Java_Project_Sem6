@@ -15,11 +15,12 @@ import com.JavaProject.repository.UserRepo;
 import com.JavaProject.entity.User;
 import com.JavaProject.service.UserService;
 import com.fasterxml.jackson.annotation.JsonCreator.Mode;
+import com.JavaProject.repository.AcceptedRepo;
 import com.JavaProject.repository.RequestsRepo;
 import com.JavaProject.entity.Requests;
 import jakarta.servlet.http.HttpSession;
 import com.JavaProject.service.RequestService;
-
+import com.JavaProject.entity.Accepted;
 
 @Controller
 public class HomeController {
@@ -32,6 +33,9 @@ public class HomeController {
 
     @Autowired
     private RequestsRepo requestsRepo;
+
+    @Autowired
+    private AcceptedRepo acceptedRepo;
 
     @Autowired
     private RequestService requestService;
@@ -73,7 +77,13 @@ public class HomeController {
         String email = p.getName();
         User user = userRepo.findByEmail(email);
         m.addAttribute("user", user);
-        List<Requests> requests = requestsRepo.findAll();
+        // Fetch the accepted friends of the user from the database
+        List<Accepted> acceptedFriends = acceptedRepo.findAll();
+        m.addAttribute("acceptedFriends", acceptedFriends);
+
+        
+        List<Requests> requests = requestsRepo.findAll();  
+        
         // Add requests to the model
         m.addAttribute("requests", requests);
         return "inbox";
