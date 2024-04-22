@@ -32,7 +32,19 @@
         </div>
     </nav>
     <!-- End Navbar -->
-
+    <!-- Challenges Section -->
+<section class="container mt-4">
+    <div class="card">
+        <div class="card-header bg-danger text-white">
+            <h2 class="card-title text-center">Challenges</h2>
+        </div>
+        <div class="card-body">
+            <div id="challengeList" class="row">
+                <!-- Challenges will be displayed here -->
+            </div>
+        </div>
+    </div>
+</section>
     <!-- Projects Section -->
     <section class="container mt-4">
         <div class="card">
@@ -117,6 +129,45 @@
             var filteredProjects = projectsData.filter(project => project.domain === domainInput);
             displayProjects(filteredProjects);
         }
+        function displayChallenges() {
+    var challengeListDiv = document.getElementById('challengeList');
+    challengeListDiv.innerHTML = ''; // Clear previous challenges
+
+    // Group projects by domain
+    var projectsByDomain = projectsData.reduce((acc, project) => {
+        if (!acc[project.domain]) {
+            acc[project.domain] = [];
+        }
+        acc[project.domain].push(project);
+        return acc;
+    }, {});
+
+    // Get the hardest project for each domain
+    Object.entries(projectsByDomain).forEach(([domain, projects]) => {
+        var hardestProject = projects.find(project => project.difficultyLevel === 'HARD');
+
+        if (hardestProject) {
+            var challengeCard = document.createElement('div');
+            challengeCard.classList.add('col-sm-4', 'mb-3');
+
+            var card = `
+                <div class="card">
+                    <div class="card-header bg-danger text-white">${domain}</div>
+                    <div class="card-body">
+                        <p class="card-text">${hardestProject.projectName}</p>
+                        <p class="card-text">Difficulty Level: ${hardestProject.difficultyLevel}</p>
+                    </div>
+                </div>
+            `;
+            challengeCard.innerHTML = card;
+
+            challengeListDiv.appendChild(challengeCard);
+        }
+    });
+}
+
+// Call the displayChallenges function to populate the challenges panel
+displayChallenges();
 
         function displayProjects(projects) {
             var projectListDiv = document.getElementById('projectList');
