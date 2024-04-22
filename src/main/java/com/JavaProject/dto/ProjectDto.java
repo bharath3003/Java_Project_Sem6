@@ -1,4 +1,4 @@
-package com.example.demo_thymeleaf.dto;
+package com.JavaProject.dto;
 
 public class ProjectDto {
     private long id;

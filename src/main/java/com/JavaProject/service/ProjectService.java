@@ -1,9 +1,9 @@
-package com.example.demo_thymeleaf.service;
+package com.JavaProject.service;
 
 import java.util.List;
 
-import com.example.demo_thymeleaf.dto.ProjectDto;
-import com.example.demo_thymeleaf.model.Project;
+import com.JavaProject.dto.ProjectDto;
+import com.JavaProject.entity.Project;
 
 public interface ProjectService {
     List<ProjectDto> getAllProjects();

@@ -1,4 +1,4 @@
-package com.example.demo_thymeleaf.service;
+package com.JavaProject.service;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -6,9 +6,9 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.example.demo_thymeleaf.dto.ProjectDto;
-import com.example.demo_thymeleaf.model.Project;
-import com.example.demo_thymeleaf.repository.ProjectRepository;
+import com.JavaProject.dto.ProjectDto;
+import com.JavaProject.entity.Project;
+import com.JavaProject.repository.ProjectRepository;
 
 @Service
 public class ProjectServiceImpl implements ProjectService {
