@@ -1,42 +1,18 @@
-/* package com.example.demo_thymeleaf.service;
-
-import java.util.List;
-
-// import java.util.Optional;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import com.example.demo_thymeleaf.model.Project;
-import com.example.demo_thymeleaf.repository.ProjectRepository;
-
-@Service
-public class ProjectServiceImpl implements ProjectService {
-
-    private ProjectRepository projectRepository;
-
-    @Autowired
-    public ProjectServiceImpl(ProjectRepository projectRepository) {
-        this.projectRepository = projectRepository;
-    }
-
-    @Override
-    public List<Project> getAllProjects() {
-        System.out.println(projectRepository.findAll());
-        return projectRepository.findAll();
-    }
-} */
 package com.example.demo_thymeleaf.service;
 
 import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import com.example.demo_thymeleaf.dto.ProjectDto;
 import com.example.demo_thymeleaf.model.Project;
 import com.example.demo_thymeleaf.repository.ProjectRepository;
 
 @Service
 public class ProjectServiceImpl implements ProjectService {
-    private ProjectRepository projectRepository;
+    private final ProjectRepository projectRepository;
 
     @Autowired
     public ProjectServiceImpl(ProjectRepository projectRepository) {
@@ -44,7 +20,20 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public List<Project> getAllProjects() {
-        return projectRepository.findAll();
+    public List<ProjectDto> getAllProjects() {
+        List<Project> projects = projectRepository.findAll();
+        return projects.stream()
+                .map(this::convertToDto)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public ProjectDto convertToDto(Project project) {
+        ProjectDto projectDto = new ProjectDto();
+        projectDto.setId(project.getId());
+        projectDto.setTitle(project.getTitle());
+        projectDto.setDomain(project.getDomain());
+        projectDto.setLikes(project.getLikes());
+        return projectDto;
     }
 }
