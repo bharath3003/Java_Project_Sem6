@@ -41,19 +41,19 @@
             <div class="card-body">
                 <div class="row mb-3">
                     <div class="col-sm-12">
-                        <label for="domainInput" class="form-label">Enter Domain Name:</label>
-                        <input type="text" class="form-control" id="domainInput" placeholder="Enter domain name">
-                        <button class="btn btn-primary mt-2" onclick="fetchProjects()">Search Projects</button>
+                        <label for="projectNameInput" class="form-label">Enter Project Name:</label>
+                        <input type="text" class="form-control" id="projectNameInput" placeholder="Enter project name">
+                        <button class="btn btn-primary mt-2" onclick="fetchProjectDetails()">Search Project</button>
                     </div>
                 </div>
-                <div id="projectList" class="row"></div> <!-- Projects will be displayed here -->
+                <div id="projectDetails" class="row"></div> <!-- Project details will be displayed here -->
             </div>
         </div>
     </section>
 
     <!-- Include Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
-    <!-- Custom JavaScript for fetching and displaying projects -->
+    <!-- Custom JavaScript for fetching and displaying project details -->
     <script>
         var projectsData = [
             { projectName: 'ML Project 1', domain: 'MACHINE_LEARNING', difficultyLevel: 'EASY' },
@@ -111,19 +111,40 @@
             { projectName: 'Computer Graphics Project 5', domain: 'COMPUTER_GRAPHICS', difficultyLevel: 'HARD' }
         ];
 
-        function fetchProjects() {
-            var domainInput = document.getElementById('domainInput').value.trim().toUpperCase();
-            var filteredProjects = projectsData.filter(project => project.domain === domainInput);
-            displayProjects(filteredProjects);
+        var usersData = [
+            { id: 1, email: 'user1@example.com', mobile: '1234567890', name: 'Alice Johnson', domain: 'MACHINE_LEARNING' },
+            { id: 2, email: 'user2@example.com', mobile: '9876543210', name: 'Bob Smith', domain: 'MACHINE_LEARNING' },
+            { id: 3, email: 'user3@example.com', mobile: '1357924680', name: 'Charlie Brown', domain: 'CYBERSECURITY' },
+            { id: 4, email: 'user4@example.com', mobile: '2468135790', name: 'David Miller', domain: 'CYBERSECURITY' },
+            { id: 5, email: 'user5@example.com', mobile: '3141592653', name: 'Emma Wilson', domain: 'CLOUD_COMPUTING' },
+            { id: 6, email: 'user6@example.com', mobile: '2718281828', name: 'Frank Thomas', domain: 'CLOUD_COMPUTING' },
+            { id: 7, email: 'user7@example.com', mobile: '1123581321', name: 'Grace White', domain: 'BLOCKCHAIN' },
+            { id: 8, email: 'user8@example.com', mobile: '9999999999', name: 'Henry Davis', domain: 'BLOCKCHAIN' },
+            { id: 9, email: 'user9@example.com', mobile: '8888888888', name: 'Isabella Martinez', domain: 'IOT' },
+            { id: 10, email: 'user10@example.com', mobile: '7777777777', name: 'Jack Wilson', domain: 'IOT' },
+            { id: 11, email: 'user11@example.com', mobile: '6666666666', name: 'Kate Brown', domain: 'ROBOTICS' },
+            { id: 12, email: 'user12@example.com', mobile: '5555555555', name: 'Liam Anderson', domain: 'ROBOTICS' },
+            { id: 13, email: 'user13@example.com', mobile: '4444444444', name: 'Mia Taylor', domain: 'ARTIFICIAL_INTELLIGENCE' },
+            { id: 14, email: 'user14@example.com', mobile: '3333333333', name: 'Noah Martinez', domain: 'ARTIFICIAL_INTELLIGENCE' },
+            { id: 15, email: 'user15@example.com', mobile: '2222222222', name: 'Olivia Brown', domain: 'DATA_SCIENCE' },
+            { id: 16, email: 'user16@example.com', mobile: '1111111111', name: 'Peter Wilson', domain: 'DATA_SCIENCE' },
+            { id: 17, email: 'user17@example.com', mobile: '1010101010', name: 'Quinn Johnson', domain: 'COMPUTER_GRAPHICS' },
+            { id: 18, email: 'user18@example.com', mobile: '2020202020', name: 'Rachel Davis', domain: 'COMPUTER_GRAPHICS' }
+        ];
+
+        function fetchProjectDetails() {
+            var projectNameInput = document.getElementById('projectNameInput').value.trim();
+            var project = projectsData.find(project => project.projectName.toUpperCase() === projectNameInput.toUpperCase());
+            displayProjectDetails(project);
         }
 
-        function displayProjects(projects) {
-            var projectListDiv = document.getElementById('projectList');
-            projectListDiv.innerHTML = ''; // Clear previous projects
+        function displayProjectDetails(project) {
+            var projectDetailsDiv = document.getElementById('projectDetails');
+            projectDetailsDiv.innerHTML = ''; // Clear previous project details
 
-            projects.forEach(project => {
+            if (project) {
                 var projectCard = document.createElement('div');
-                projectCard.classList.add('col-sm-4', 'mb-3');
+                projectCard.classList.add('col-sm-12');
 
                 var card = `
                     <div class="card">
@@ -131,13 +152,22 @@
                         <div class="card-body">
                             <p class="card-text">Domain: ${project.domain}</p>
                             <p class="card-text">Difficulty Level: ${project.difficultyLevel}</p>
+                            <p class="card-text">Users with the Same Domain:</p>
+                            <ul>
+                                ${usersData.filter(user => user.domain === project.domain).map(user => `<li>${user.name}</li>`).join('')}
+                            </ul>
                         </div>
                     </div>
                 `;
                 projectCard.innerHTML = card;
 
-                projectListDiv.appendChild(projectCard);
-            });
+                projectDetailsDiv.appendChild(projectCard);
+            } else {
+                var errorMessage = document.createElement('div');
+                errorMessage.classList.add('col-sm-12', 'text-danger', 'mt-3');
+                errorMessage.innerText = 'Project not found!';
+                projectDetailsDiv.appendChild(errorMessage);
+            }
         }
     </script>
 </body>

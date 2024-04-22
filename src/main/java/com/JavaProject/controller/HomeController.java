@@ -73,6 +73,10 @@ public class HomeController {
         return "profile";
     }
 
+    @GetMapping("/user/projectdetails")
+    public String projectdetails() {
+        return "projectdetails";
+    }
      @GetMapping("/user/projects")
     public String projects(Model model) {
         // Get all projects initially

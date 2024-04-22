@@ -23,6 +23,7 @@
                     <th:block th:if="${user!=null}">
                         <li class="nav-item"><a class="nav-link" href="/user/profile">Profile</a></li>
                         <li class="nav-item"><a class="nav-link" href="/user/projects">Projects</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/user/projectdetails">Project Details</a></li>
                         <li class="nav-item"><a class="nav-link" href="/logout">Logout</a></li>
                     </th:block>
                 </ul>
@@ -62,9 +63,7 @@
                     <p class="form-control-plaintext" th:text="${user.domainName}"></p>
                 </div>
             </div>
-            <div class="row justify-content-center">
-                <a href="/edit-profile" class="btn btn-primary">Edit Profile</a>
-            </div>
+            
         </div>
     </div>
 </section>
