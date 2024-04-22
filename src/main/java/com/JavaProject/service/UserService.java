@@ -8,4 +8,6 @@ public interface UserService {
 
 	public void removeSessionMessage();
 
+	User getUserByEmail(String email);
+
 }

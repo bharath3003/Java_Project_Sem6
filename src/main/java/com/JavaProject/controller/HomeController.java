@@ -20,6 +20,12 @@ import com.JavaProject.entity.User;
 import com.JavaProject.service.ProjectService;
 import com.JavaProject.service.UserService;
 import com.fasterxml.jackson.annotation.JsonCreator.Mode;
+import com.JavaProject.repository.AcceptedRepo;
+import com.JavaProject.repository.RequestsRepo;
+import com.JavaProject.entity.Requests;
+import jakarta.servlet.http.HttpSession;
+import com.JavaProject.service.RequestService;
+import com.JavaProject.entity.Accepted;
 
 import jakarta.servlet.http.HttpSession;
 
@@ -37,6 +43,15 @@ public class HomeController {
 
     @Autowired
     private ProjectRepository projectRepository;
+
+    @Autowired
+    private RequestsRepo requestsRepo;
+
+    @Autowired
+    private AcceptedRepo acceptedRepo;
+
+    @Autowired
+    private RequestService requestService;
 
     @ModelAttribute
     public void commonUser(Principal p, Model m) {
@@ -96,7 +111,23 @@ public class HomeController {
         // Return the projects.html template
         return "projects";
     }
+    @GetMapping("/user/inbox")
+    public String inbox(Principal p, Model m) {
+        String email = p.getName();
+        User user = userRepo.findByEmail(email);
+        m.addAttribute("user", user);
+        // Fetch the accepted friends of the user from the database
+        List<Accepted> acceptedFriends = acceptedRepo.findAll();
+        m.addAttribute("acceptedFriends", acceptedFriends);
 
+        
+        List<Requests> requests = requestsRepo.findAll();  
+        
+        // Add requests to the model
+        m.addAttribute("requests", requests);
+        return "inbox";
+        
+    }
 
 
     @PostMapping("/saveUser")
@@ -108,5 +139,26 @@ public class HomeController {
             session.setAttribute("msg", "Server error");
         }
         return "redirect:/register";
+    }
+    @PostMapping("/inbox/acceptRequest")
+    public String acceptRequest(@RequestParam("reqSender") String reqSender, @ModelAttribute("user") User user) {
+        requestService.acceptRequest(reqSender, user.getEmail());
+        return "redirect:/user/inbox";
+    }
+
+    @PostMapping("/inbox/rejectRequest")
+    public String rejectRequest(@RequestParam("reqSender") String reqSender, @ModelAttribute("user") User user) {
+        requestService.rejectRequestBySender(reqSender, user.getEmail());
+        return "redirect:/user/inbox";
+    }
+    @GetMapping("/viewprofile")
+    public String viewFriendProfile(@RequestParam("friendEmail") String friendEmail, Model model) {
+        // Retrieve the friend's profile from the database using their email
+        User friend = userService.getUserByEmail(friendEmail);
+        
+        // Add the friend's profile to the model
+        model.addAttribute("friend", friend);
+        
+        return "friend_profile"; // Assuming friend_profile.html is the template for friend profiles
     }
 }
